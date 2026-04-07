@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QG Markets</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- MARKET CONTAINER -->
+    <div id="market-container" class="hidden">
+        <!-- Market Interface -->
+        <div id="market-interface" class="market-window">
+            <div class="market-header">
+                <h2 id="market-title">Market</h2>
+            </div>
+            
+            <div class="market-content">
+                <!-- Left Side - Cart -->
+                <div class="cart-section">
+                    <div class="cart-header">
+                        <h3>Sepet</h3>
+                    </div>
+                    
+                    <div class="cart-items" id="cart-items">
+                        <!-- Cart items will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="cart-total-section">
+                        <div class="cart-total-amount" id="cart-total">$0.00</div>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Items and Controls -->
+                <div class="items-section">
+                    <div class="search-section">
+                        <div class="search-container">
+                            <input type="text" id="search-input" placeholder="Bir şeyler ara..." class="search-input">
+                        </div>
+                    </div>
+                    
+                    <div class="items-grid" id="items-grid">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Actions -->
+            <div class="cart-actions">
+                <button id="pay-btn" class="pay-btn">Öde</button>
+                <button id="clear-cart-btn" class="clear-cart-btn">Sepeti Temizle</button>
+                <button id="exit-btn" class="exit-btn">Çıkış</button>
+            </div>
+        </div>
+        
+        <!-- Payment Interface -->
+        <div id="payment-interface" class="payment-window hidden">
+            <div class="payment-header">
+                <h2>Ödeme Ekranı</h2>
+            </div>
+            
+            <div class="payment-content">
+                <div class="payment-left">
+                    <h3>Seçenekler</h3>
+                    <div class="payment-options">
+                        <button class="payment-option" data-method="cash">Nakit</button>
+                        <button class="payment-option" data-method="bank">Banka Kartı</button>
+                    </div>
+                </div>
+                
+                <div class="payment-right">    
+                    <div class="payment-total-section">
+                        <div class="payment-total-label">Toplam</div>
+                        <div class="payment-total-amount" id="payment-total">$999.00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-actions">
+                <button id="cancel-payment-btn" class="cancel-btn">İptal</button>
+                <button id="confirm-payment-btn" class="confirm-btn">Öde</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- VENDING MACHINE CONTAINER -->
+    <div id="vending-container" class="hidden">
+        <div id="vending-interface" class="vending-window">
+            <div class="vending-header">
+                <h2 id="vending-title">Otomat</h2>
+            </div>
+            
+            <div class="vending-content">
+                <!-- Items Display -->
+                <div class="vending-items-section">
+                    <div class="vending-items-grid" id="vending-items-grid">
+                        <!-- Vending items will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Control Panel -->
+                <div class="vending-controls">
+                    <div class="vending-display">
+                        <div class="vending-screen">
+                            <div id="vending-display-text">Ürün Seçiniz</div>
+                            <div id="vending-price-display" class="vending-price">$0.00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="vending-payment">
+                        <div class="vending-payment-methods">
+                            <button class="vending-payment-btn" data-method="cash">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Nakit</span>
+                            </button>
+                            <button class="vending-payment-btn" data-method="bank">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Kart</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="vending-actions">
+                        <button id="vending-buy-btn" class="vending-buy-btn" disabled>Satın Al</button>
+                        <button id="vending-cancel-btn" class="vending-cancel-btn">İptal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MARKET MANAGEMENT CONTAINER -->
+    <div id="market-management-container" class="hidden">
+        <div class="market-management-window">
+            <div class="market-management-header">
+                <h2 id="mgmt-location-title">Market Yönetimi</h2>
+            </div>
+
+            <div class="market-management-tabs">
+                <button class="mgmt-tab active" data-section="market">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    </svg>
+                    <span>Market</span>
+                </button>
+                <button class="mgmt-tab" data-section="stock">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Stokları Aktar</span>
+                </button>
+                <button class="mgmt-tab" data-section="sales">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <span>Satışlar</span>
+                </button>
+                <button class="mgmt-tab" data-section="employees">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Çalışanlar</span>
+                </button>
+                <button class="mgmt-tab" id="mgmt-exit-btn" data-section="exit">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Çıkış</span>
+                </button>
+            </div>
+
+            <div class="market-management-content">
+                <!-- Market Section -->
+                <div id="mgmt-market" class="mgmt-section active">
+                    <div class="mgmt-content-area">
+                        <div class="mgmt-info-box">
+                            <h3>Market Bilgileri</h3>
+                            <p>Bu bölümde marketinizin genel bilgilerini görüntüleyebilirsiniz.</p>
+                            <div class="mgmt-stats">
+                                <div class="mgmt-stat-item">
+                                    <span class="stat-label">Toplam Gelir</span>
+                                    <span class="stat-value" id="market-total-revenue">$0</span>
+                                </div>
+                                <div class="mgmt-stat-item">
+                                    <span class="stat-label">Toplam Satış</span>
+                                    <span class="stat-value" id="market-total-sales">0</span>
+                                </div>
+                                <div class="mgmt-stat-item">
+                                    <span class="stat-label">Son Toplama</span>
+                                    <span class="stat-value" id="market-last-collected">Hiçbir zaman</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Transfer Section -->
+                <div id="mgmt-stock" class="mgmt-section">
+                    <div class="mgmt-content-area">
+                        <!-- Add Stock from Inventory -->
+                        <div class="mgmt-stock-section">
+                            <div class="stock-section-header">
+                                <button id="load-inventory-btn" class="admin-btn admin-btn-secondary">Yenile</button>
+                            </div>
+                            <div id="inventory-items" class="mgmt-inventory-grid">
+                                <p class="mgmt-empty-state">Envanter yükleniyor...</p>
+                            </div>
+                        </div>
+
+                        <!-- Current Stock -->
+                        <div class="mgmt-stock-section">
+                            <div class="stock-section-header">
+                                <button id="refresh-stock-btn" class="admin-btn admin-btn-secondary">Yenile</button>
+                            </div>
+                            <div id="current-stock-list" class="mgmt-stock-list">
+                                <p class="mgmt-empty-state">Stok bilgisi yükleniyor...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Section -->
+                <div id="mgmt-sales" class="mgmt-section">
+						<div class="mgmt-content-area">
+						  <div class="mgmt-info-box" style="display: flex; justify-content: space-between; align-items: center;">
+							<div style="display: flex; gap: 15px; align-items: center; width: 100%;">
+							  <div style="text-align: left;">
+								<div style="font-size: 40px; font-weight: 600; color: #4CAF50;" id="total-revenue">$0</div>
+							  </div>
+							  <button id="collect-revenue-btn" class="admin-btn admin-btn-success" 
+									  style="min-width: 150px; margin-left: auto;">
+								Geliri Topla
+							  </button>
+							</div>
+						  </div>
+						</div>
+                        <div class="mgmt-revenue-actions" style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                            <button id="load-sales-btn" class="admin-btn admin-btn-secondary">Yenile</button>
+                        </div>
+                    </div>
+					
+                <!-- Employees Section -->
+                <div id="mgmt-employees" class="mgmt-section">
+                    <div class="mgmt-content-area">
+                        <div class="mgmt-info-box">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <button id="add-employee-btn" class="admin-btn admin-btn-success">
+                                    Çalışan Ekle
+                                </button>
+                            </div>
+                            <div id="employee-list" class="employee-list">
+                                <p class="mgmt-empty-state">Çalışanlar yükleniyor...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL CONTAINER -->
+    <div id="admin-panel-container" class="hidden">
+        <div id="admin-panel-interface" class="admin-panel-window">
+            <div class="admin-panel-header">
+                <h2>Market Yönetim Paneli</h2>
+                <button id="admin-close-btn" class="admin-close-btn">×</button>
+            </div>
+
+            <div class="admin-panel-content">
+                <div class="admin-markets-section">
+                    <h3>24/7 Supermarket Lokasyonları</h3>
+                    <div class="admin-markets-grid" id="admin-markets-grid">
+                        <!-- Market locations will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHOLESALER CONTAINER -->
+    <div id="wholesaler-container" class="hidden">
+        <!-- Main Wholesaler Interface -->
+        <div id="wholesaler-main-interface" class="wholesaler-window">
+            <div class="wholesaler-header">
+                <h2>Toptancı</h2>
+            </div>
+
+            <div class="wholesaler-content">
+                <div class="wholesaler-left">
+                    <div class="wholesaler-market-select">
+                        <label>Market Seçin:</label>
+                        <select id="wholesaler-market-select" class="market-select">
+                            <option value="">Market seçin...</option>
+                        </select>
+                    </div>
+
+                    <div class="wholesaler-products-section">
+                        <h3>Ürünler</h3>
+                        <div class="wholesaler-products-grid" id="wholesaler-products-grid">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wholesaler-right">
+                    <div class="wholesaler-order-section">
+                        <h3>Sipariş Listesi</h3>
+                        <div class="wholesaler-order-items" id="wholesaler-order-items">
+                            <p class="empty-message">Henüz ürün eklenmedi</p>
+                        </div>
+
+                        <div class="wholesaler-order-options">
+                            <label class="express-delivery-label">
+                                <input type="checkbox" id="express-delivery-checkbox">
+                                <span>Hızlı Teslimat (%50 daha fazla ücret)</span>
+                            </label>
+                        </div>
+
+                        <div class="wholesaler-order-summary">
+                            <div class="summary-row">
+                                <span>Ara Toplam:</span>
+                                <span id="wholesaler-subtotal">$0</span>
+                            </div>
+                            <div class="summary-row" id="express-fee-row" style="display: none;">
+                                <span>Hızlı Teslimat Ücreti:</span>
+                                <span id="wholesaler-express-fee">$0</span>
+                            </div>
+                            <div class="summary-row total-row">
+                                <span>Toplam:</span>
+                                <span id="wholesaler-total">$0</span>
+                            </div>
+                            <div class="delivery-time-info">
+                                <span id="delivery-time-text">Teslimat Süresi: 60 dakika</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wholesaler-pending-orders">
+                        <h3>Bekleyen Siparişler</h3>
+                        <div id="pending-orders-list">
+                            <p class="empty-message">Bekleyen sipariş yok</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wholesaler-actions">
+                <button id="wholesaler-place-order-btn" class="place-order-btn" disabled>Sipariş Ver</button>
+                <button id="wholesaler-close-btn" class="close-btn">Kapat</button>
+            </div>
+        </div>
+
+        <!-- Payment Interface -->
+        <div id="wholesaler-payment-interface" class="payment-window hidden">
+            <div class="payment-header">
+                <h2>Ödeme Ekranı</h2>
+            </div>
+
+            <div class="payment-content">
+                <div class="payment-left">
+                    <h3>Seçenekler</h3>
+                    <div class="payment-options">
+                        <button class="payment-option" data-method="cash">Nakit</button>
+                        <button class="payment-option" data-method="bank">Banka Kartı</button>
+                    </div>
+                </div>
+
+                <div class="payment-right">
+                    <div class="payment-total-section">
+                        <div class="payment-total-label">Toplam</div>
+                        <div class="payment-total-amount" id="wholesaler-payment-total">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment-actions">
+                <button id="wholesaler-cancel-payment-btn" class="cancel-btn">İptal</button>
+                <button id="wholesaler-confirm-payment-btn" class="confirm-btn">Öde</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="admin_script.js"></script>
+    <script src="wholesaler_script.js"></script>
+</body>
+</html>
