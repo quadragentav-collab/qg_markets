@@ -1,8 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author 'QG Scripts'
-description 'QG Markets - Advanced Market System for QBCore'
+author 'KazeServices'
+description 'qg_markets'
 version '1.0.0'
 
 shared_scripts {
